@@ -17,20 +17,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.interfazadat.Dto.UsuarioRegisterDTO
-import com.example.interfazadat.model.Direccion
 import com.example.interfazadat.apiservice.RetrofitClient
 import com.example.interfazadat.componentes.editText
 import com.example.interfazadat.componentes.texto
 import com.example.interfazadat.componentes.ventana
+import com.example.interfazadat.model.Direccion
+import com.example.interfazadat.viewModel.UsuariosViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun Registrarse(navControlador: NavHostController) {
+fun darDeAltaScreen(navControlador: NavHostController, usuariosViewmodel: UsuariosViewModel) {
     var username by remember { mutableStateOf("nico") }
     var email by remember { mutableStateOf("n@n.com") }
     var password by remember { mutableStateOf("nico") }
@@ -41,17 +44,8 @@ fun Registrarse(navControlador: NavHostController) {
     var ciudad by remember { mutableStateOf("Barcelona") }
     var municipio by remember { mutableStateOf("Centro") }
     var provincia by remember { mutableStateOf("COMUNIDAD DE MADRID") }
-    var titulo by remember { mutableStateOf("") }
-    var mensaje by remember { mutableStateOf("") }
     var cargando by remember { mutableStateOf(false) }
-    var estadoventana by remember { mutableStateOf(false) }
-    var estadoVentanaCorrecta by remember { mutableStateOf(false) }
-    if (estadoventana) {
-        ventana(mensaje, titulo, { estadoventana = false })
-    }
-    if(estadoVentanaCorrecta){
-        ventana(mensaje, titulo) { navControlador.navigate("login") }
-    }
+    val context = LocalContext.current
 
     LazyColumn(
         modifier = Modifier
@@ -155,42 +149,21 @@ fun Registrarse(navControlador: NavHostController) {
                 enabled = !cargando,
                 onClick = {
                     cargando = true
-                    CoroutineScope(Dispatchers.Main).launch {
-                        try {
-                            val responseUsuarioRegister = RetrofitClient.instance.registrarUsuario(
-                                UsuarioRegisterDTO(
-                                    username = username,
-                                    email = email,
-                                    rol = "USER",
-                                    password = password,
-                                    passwordRepeat = passwordRepeat,
-                                    direccion = Direccion(
-                                        calle = calle,
-                                        cp = cp,
-                                        num = numero,
-                                        ciudad = ciudad,
-                                        municipio = municipio,
-                                        provincia = provincia
-                                    )
-                                )
-                            )
-                            if (!responseUsuarioRegister.isSuccessful) {
-                                val errorMessage = responseUsuarioRegister.errorBody()?.string() ?: "Error desconocido"
-                                throw Exception("Error al registrar usuario: ${responseUsuarioRegister.code()} - $errorMessage")
-                            }
-                            val usuario =responseUsuarioRegister.body()
-
-                            titulo = "Éxito"
-                            mensaje = usuario?.let {
-                                "${it.username}\n${it.email}\n${it.rol}"
-                            } ?: "El usuario no se pudo recuperar"
-                            estadoVentanaCorrecta = true
-                        } catch (e: Exception) {
-                            titulo = "Error"
-                            mensaje = "Error al registrar usuario: ${e.message}"
-                        }
-                        estadoventana = true
-                    }
+                    usuariosViewmodel.darDeAlta(UsuarioRegisterDTO(
+                        username = username,
+                        email = email,
+                        rol = "USER",
+                        password = password,
+                        passwordRepeat = passwordRepeat,
+                        direccion = Direccion(
+                            calle = calle,
+                            cp = cp,
+                            num = numero,
+                            ciudad = ciudad,
+                            municipio = municipio,
+                            provincia = provincia
+                        )
+                    ),context)
                     cargando = false
 
                 }
@@ -202,9 +175,8 @@ fun Registrarse(navControlador: NavHostController) {
             Button(
                 enabled = !cargando,
                 onClick = {
-                navControlador.navigate("login")
-            }) { texto("logearse") }
+                    navControlador.navigate("menu")
+                }) { texto("volver") }
         }
     }
 }
-

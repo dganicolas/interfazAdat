@@ -7,12 +7,21 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.interfazadat.pantalla.Bienvenida
 import com.example.interfazadat.pantalla.Login
+import com.example.interfazadat.pantalla.Menu
 import com.example.interfazadat.pantalla.Registrarse
+import com.example.interfazadat.pantalla.crearTarea
+import com.example.interfazadat.pantalla.darDeAltaScreen
+import com.example.interfazadat.pantalla.listarUsuarios
+import com.example.interfazadat.pantalla.miZona
+import com.example.interfazadat.viewModel.TareasViewModel
+import com.example.interfazadat.viewModel.UsuariosViewModel
 
 @Composable
 fun AppNavigation(modifier: Modifier) {
     val navControlador = rememberNavController()
-    NavHost(navController = navControlador, startDestination = "registrarse") {
+    val  tareasViewModel = TareasViewModel()
+    val usuariosViewmodel = UsuariosViewModel()
+    NavHost(navController = navControlador, startDestination = "login") {
         composable("bienvenida") {
             Bienvenida(navControlador)
         }
@@ -25,6 +34,23 @@ fun AppNavigation(modifier: Modifier) {
             "registrarse"
         ) {
             Registrarse(navControlador)
+        }
+        composable(
+            "menu"
+        ) {
+            Menu(navControlador,tareasViewModel)
+        }
+        composable("crear tarea"){
+            crearTarea(navControlador,tareasViewModel)
+        }
+        composable("darAlta") {
+            darDeAltaScreen(navControlador,usuariosViewmodel)
+        }
+        composable("mi zona") {
+            miZona(navControlador,usuariosViewmodel)
+        }
+        composable("listarusarios") {
+            listarUsuarios(navControlador,usuariosViewmodel)
         }
     }
 }

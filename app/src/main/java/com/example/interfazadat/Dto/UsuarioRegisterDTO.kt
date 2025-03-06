@@ -1,6 +1,6 @@
 package com.example.interfazadat.Dto
 
-import com.example.interfazadat.Model.Direccion
+import com.example.interfazadat.model.Direccion
 
 data class UsuarioRegisterDTO(
     val username: String,

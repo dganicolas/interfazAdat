@@ -1,4 +1,4 @@
-package com.example.interfazadat.Model
+package com.example.interfazadat.model
 
 data class Direccion(
     val calle: String,
