@@ -22,7 +22,7 @@ fun AppNavigation(modifier: Modifier) {
     val  tareasViewModel = TareasViewModel()
     val usuariosViewmodel = UsuariosViewModel()
     NavHost(navController = navControlador, startDestination = "login") {
-        composable("bienvenida") {
+        composable("menu") {
             Bienvenida(navControlador)
         }
         composable(
