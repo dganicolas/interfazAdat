@@ -206,31 +206,30 @@ interface ApiService {
 # caso del register exitoso
 
 -bases de datos, render y app antes del inicio de login exitoso
-![img.png](src%2Fsrc%2Fimg.png)
-![img.png](app%2Fsrc%2Fimg.png)
+- ![img.png](app%2Fsrc%2Fimg.png)
 - caso exitoso 1: el register se hace correctamente
-  ![img_1.png](src%2Fsrc%2Fimg_1.png)
+- ![img_1.png](app%2Fsrc%2Fimg_1.png)
 
 # caso del register fallidos
 
 - caso fallido 1: nombre existente en la base de datos
-  ![img_2.png](src%2Fsrc%2Fimg_2.png)
+- ![img_2.png](app%2Fsrc%2Fimg_2.png)
 - caso fallido 2: contraseñas distintas
-  ![img_3.png](src%2Fsrc%2Fimg_3.png)
+- ![img_3.png](app%2Fsrc%2Fimg_3.png)
 - caso fallido 3: provincia no existe
-  ![img_4.png](src%2Fsrc%2Fimg_4.png)
+- ![img_4.png](app%2Fsrc%2Fimg_4.png)
 - caso fallido 4: el email es invalido
-  ![img_5.png](src%2Fsrc%2Fimg_5.png)
+- ![img_5.png](app%2Fsrc%2Fimg_5.png)
 
 # casos de login exitoso
 
 - caso exitoso 1: me devuelve el token
-  ![img_6.png](src%2Fsrc%2Fimg_6.png)
+- ![img_6.png](app%2Fsrc%2Fimg_6.png)
 
 # casos de login fallido
 
 - caso fallido 1: el usuario no existe en la BD
-  ![img_1.png](img_1.png)
+- ![img_1.png](app%2Fsrc%2Fimg_1.png)
 
 <br><br><br><br><br>
 
@@ -246,17 +245,17 @@ interface ApiService {
 
 - caso exito 1:
 - el usuario envia su token y lista las tareas suyas
-- ![img_5.png](src%2Fsrc%2Fparte2%2Fimg_5.png)
+- ![img_5.png](app%2Fsrc%2Fparte2%2Fimg_5.png)
 
 ### casos fallido:
 
 - caso fallido 1:
 - el usuario envia su token e intenta ver tareas de otras personas
 - Marcar como hecha una tarea propia
-- ![img_6.png](src%2Fsrc%2Fparte2%2Fimg_6.png)
+- ![img_6.png](app%2Fsrc%2Fparte2%2Fimg_6.png)
 - caso fallido 2:
 - el usuario no envia el token
-- ![img_7.png](src%2Fsrc%2Fparte2%2Fimg_7.png)
+- ![img_7.png](app%2Fsrc%2Fparte2%2Fimg_7.png)
 
 ## Eliminar una tarea propia
 
@@ -266,17 +265,17 @@ interface ApiService {
 
 - caso de exito 1:
 - el usuario envia su token y elimina unas de sus propias tareas
-- ![img_10.png](src%2Fsrc%2Fparte2%2Fimg_10.png)
+- ![img_10.png](app%2Fsrc%2Fparte2%2Fimg_10.png)
 
 ### casos fallidos:
 
 - caso fallido 1:
 - el usuario envia un nombre de tarea a eliminar que no existe
-- ![img_8.png](src%2Fsrc%2Fparte2%2Fimg_8.png)
+- ![img_8.png](app%2Fsrc%2Fparte2%2Fimg_8.png)
 
 - caso fallido 2:
 - el usuario intenta borrar la tarea de otra persona
-- ![img_9.png](src%2Fsrc%2Fparte2%2Fimg_9.png)
+- ![img_9.png](app%2Fsrc%2Fparte2%2Fimg_9.png)
 
 ## Darse de alta A SÍ MISMO una tarea
 
@@ -287,24 +286,24 @@ interface ApiService {
 - caso de exito 1:
 - el usuario se crea una tarea dirigida a el
 - esperado:200 ok
-- ![img.png](src%2Fsrc%2Fparte2%2Fimg.png)
+- ![img.png](app%2Fsrc%2Fparte2%2Fimg.png)
 ### caso fallido
 
 - caso fallido 1:
 - el usuario crea una tarea a otro usuario
-- ![img_1.png](src%2Fsrc%2Fparte2%2Fimg_1.png)
+- ![img_1.png](app%2Fsrc%2Fparte2%2Fimg_1.png)
 
 - caso fallido 2:
 - el usuario intenta crear una tarea sin proporcionar un nombre.
-- ![img_2.png](src%2Fsrc%2Fparte2%2Fimg_2.png)
+- ![img_2.png](app%2Fsrc%2Fparte2%2Fimg_2.png)
 
 - caso fallido 3:
 - el usuario intenta crear una tarea sin proporcionar una descripción.
-- ![img_3.png](src%2Fsrc%2Fparte2%2Fimg_3.png)
+- ![img_3.png](app%2Fsrc%2Fparte2%2Fimg_3.png)
 
 - caso fallido 4:
 - el usuario no envia el token
-- ![img_4.png](src%2Fsrc%2Fparte2%2Fimg_4.png)
+- ![img_4.png](app%2Fsrc%2Fparte2%2Fimg_4.png)
 
 # Usuario con rol ADMIN
 
@@ -316,13 +315,13 @@ interface ApiService {
 
 - caso de exito 1:
 - el usuario admin lista todas las tareas
-- ![img_11.png](src%2Fsrc%2Fparte2%2Fimg_11.png)
+- ![img_11.png](app%2Fsrc%2Fparte2%2Fimg_11.png)
 
 ### casos fallido:
 
 - caso fallido 1:
 - un usuario NO admin accede a este endpoint
-- ![img_12.png](src%2Fsrc%2Fparte2%2Fimg_12.png)
+- ![img_12.png](app%2Fsrc%2Fparte2%2Fimg_12.png)
 
 ## Eliminar cualquier tarea de cualquier usuario
 
@@ -332,9 +331,9 @@ interface ApiService {
 
 - caso de exito 1:
 - el usuario ADMIN elimina cualquier tarea de cualquier usuario
-- ![img_13.png](src%2Fsrc%2Fparte2%2Fimg_13.png)
-- ![img_14.png](src%2Fsrc%2Fparte2%2Fimg_14.png)
-- ![img_15.png](src%2Fsrc%2Fparte2%2Fimg_15.png)
+- ![img_13.png](app%2Fsrc%2Fparte2%2Fimg_13.png)
+- ![img_14.png](app%2Fsrc%2Fparte2%2Fimg_14.png)
+- ![img_15.png](app%2Fsrc%2Fparte2%2Fimg_15.png)
 
 ## Dar de alta tareas a cualquier usuario
 
@@ -345,14 +344,14 @@ interface ApiService {
 
 - caso de exito 1:
 - el usuario ADMIN da de alta una tarea a el mismo
-- ![img_17.png](src%2Fsrc%2Fparte2%2Fimg_17.png)
+- ![img_17.png](app%2Fsrc%2Fparte2%2Fimg_17.png)
 
 - caso de exito 2:
 - el usuario ADMIN da de alta una tarea para otro usuario
-- ![img_16.png](src%2Fsrc%2Fparte2%2Fimg_16.png)
+- ![img_16.png](app%2Fsrc%2Fparte2%2Fimg_16.png)
 
 ### casos fallido:
 
 - caso fallido 1:
 - el usuario ADMIN intenta crear una tarea con un autor que no existe en la base de datos.
-- ![img_18.png](src%2Fsrc%2Fparte2%2Fimg_18.png)
+- ![img_18.png](app%2Fsrc%2Fparte2%2Fimg_18.png)
