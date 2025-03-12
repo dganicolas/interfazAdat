@@ -1,6 +1,7 @@
 package com.example.interfazadat.viewModel
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +34,7 @@ class UsuariosViewModel() : ViewModel() {
             try {
                 val responseUsuarioRegister =
                     RetrofitClient.instance.listarUsuarios(Usuario.token)
+                Log.i("msg_src", responseUsuarioRegister.toString())
                 if (!responseUsuarioRegister.isSuccessful) {
                     val errorMessage =
                         responseUsuarioRegister.errorBody()?.string() ?: "Error desconocido"
@@ -62,6 +64,7 @@ class UsuariosViewModel() : ViewModel() {
             try {
                 val responseUsuarioRegister =
                     RetrofitClient.instance.registrarUsuario(usuarioRegisterDTO)
+                Log.i("msg_src", responseUsuarioRegister.toString())
                 if (!responseUsuarioRegister.isSuccessful) {
                     val errorMessage =
                         responseUsuarioRegister.errorBody()?.string() ?: "Error desconocido"
@@ -96,6 +99,7 @@ class UsuariosViewModel() : ViewModel() {
                         contrasena!!
                     )
                 )
+                Log.i("msg_src", responseUsuarioRegister.toString())
                 if (!responseUsuarioRegister.isSuccessful) {
                     val errorMessage =
                         responseUsuarioRegister.errorBody()?.string() ?: "Error desconocido"
@@ -129,6 +133,7 @@ class UsuariosViewModel() : ViewModel() {
                     Usuario.nombre!!,
                     Usuario.token
                 )
+                Log.i("msg_src", responseUsuarioRegister.toString())
                 if (!responseUsuarioRegister.isSuccessful) {
                     val errorMessage =
                         responseUsuarioRegister.errorBody()?.string() ?: "Error desconocido"
@@ -164,10 +169,12 @@ class UsuariosViewModel() : ViewModel() {
                     username,
                     Usuario.token
                 )
+                Log.i("msg_src", responseUsuarioRegister.toString())
                 if (!responseUsuarioRegister.isSuccessful) {
                     val errorMessage =
                         responseUsuarioRegister.errorBody()?.string() ?: "Error desconocido"
-                    throw Exception("Error al registrar usuario: ${responseUsuarioRegister.code()} - $errorMessage")
+                    Log.i("msg_src",errorMessage)
+                    throw Exception("Error al eliminar el usuario: ${responseUsuarioRegister.code()} - $errorMessage")
                 }
                 val usuario = responseUsuarioRegister.body()?.get("mensaje")
                 withContext(Dispatchers.Main) {

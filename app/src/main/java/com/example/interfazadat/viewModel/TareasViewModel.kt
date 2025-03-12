@@ -39,15 +39,10 @@ class TareasViewModel : ViewModel() {
         errorMessage = ""
         viewModelScope.launch {
             try {
-                Log.i("eeeeeeeeeeeeeeeeeeeeeeeeee", Usuario.token)
                 val response = RetrofitClient.instance
-                    .listarTodasLasTareas(Usuario.token).body()
-                Log.i("xxxxxxxxxxxxx", response.toString())
-                if (response != null) {
-                    _tareas.value = response
-                } else {
-                    errorMessage = "No se encontraron tareas"
-                }
+                    .listarTodasLasTareas(Usuario.token)
+                Log.i("msg_src", response.toString())
+                _tareas.value = response.body()
             } catch (e: TimeoutCancellationException) {
                 errorMessage = "El tiempo de espera se ha agotado. Intenta nuevamente."
             } catch (e: Exception) {
@@ -62,6 +57,7 @@ class TareasViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = RetrofitClient.instance.tareaporid(tareaId, Usuario.token)
+                Log.i("msg_src", response.toString())
                 if (response.isSuccessful) {
                     tarea = response.body()
                 } else {
@@ -75,16 +71,17 @@ class TareasViewModel : ViewModel() {
 
     fun eliminarTarea(id: String, current: Context) {
 
-        Log.i("xxxxxxxx", tarea.toString())
         viewModelScope.launch {
             try {
                 guardarTarea(id)
                 val response =
-                    RetrofitClient.instance.eliminartarea(id, Usuario.token).body()?.get("mensaje")
+                    RetrofitClient.instance.eliminartarea(id, Usuario.token).body()
+                Log.i("msg_src", response.toString())
                 if (response != null) {
+                    Log.i("msg_src", response.toString())
                     cargarTareas()
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(current, "Tarea eliminada ${response}", Toast.LENGTH_SHORT)
+                        Toast.makeText(current, "Tarea eliminada ${response["mensaje"]}", Toast.LENGTH_SHORT)
                             .show()
                     }
                     Log.i("eliminada la tarea", "la tarea ${tarea?.nombre}")
@@ -107,11 +104,12 @@ class TareasViewModel : ViewModel() {
             try {
                 val response =
                     RetrofitClient.instance.actualizarEstadoTarea(id, Usuario.token).body()
-                        ?.get("mensaje")
+                Log.i("msg_src", response.toString())
                 if (response != null) {
+
                     cargarTareas()
                     withContext(Dispatchers.Main) {
-                    Toast.makeText(current, "Tarea eliminada ${response}", Toast.LENGTH_SHORT)
+                    Toast.makeText(current, "Tarea eliminada ${response?.get("mensaje") ?: "error"}", Toast.LENGTH_SHORT)
                         }
                         .show()
                 } else {
@@ -128,7 +126,7 @@ class TareasViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = RetrofitClient.instance.crearTarea(Usuario.token, nuevaTarea)
-
+                Log.i("msg_src", response.toString())
                 if (response.isSuccessful) {
                     mensajeCrearTarea = response.body()?.nombre.toString()
                     withContext(Dispatchers.Main) {
@@ -154,10 +152,11 @@ class TareasViewModel : ViewModel() {
     fun actualizarTarea(tarea: Tarea, current: Context) {
         viewModelScope.launch {
             try {
-                val response = RetrofitClient.instance.actualizarTarea(tarea, Usuario.token).body()
-                    ?.get("mensaje")
+                val response = RetrofitClient.instance.actualizarTarea(tarea, Usuario.token)
+
+                Log.i("msg_src", response.toString())
                 withContext(Dispatchers.Main) {
-                        Toast.makeText(current, "Tarea actualizada $response", Toast.LENGTH_SHORT)
+                        Toast.makeText(current, "Tarea actualizada ${response.body()?.get("mensaje")}", Toast.LENGTH_SHORT)
                             .show()
                 }
                 cargarTareas()

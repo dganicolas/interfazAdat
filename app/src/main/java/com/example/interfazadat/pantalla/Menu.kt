@@ -1,6 +1,7 @@
 package com.example.interfazadat.pantalla
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,12 +9,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -28,7 +41,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.interfazadat.componentes.AppBarConMenu
 import com.example.interfazadat.componentes.texto
@@ -115,37 +130,72 @@ fun TareaItem(tarea: Tarea, onEliminar: (String) -> Unit,onCompletadaChange: (St
     var nuevoNombre by remember { mutableStateOf(tarea.nombre) }
     var nuevaDescripcion by remember { mutableStateOf(tarea.descripcion) }
     var nuevoAutor by remember { mutableStateOf(tarea.autor) }
+    val tamano by remember { mutableStateOf(20.sp) }
     Card(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(0.93f)
             .padding(8.dp),
-        elevation = CardDefaults.elevatedCardElevation(4.dp)
+        elevation = CardDefaults.elevatedCardElevation(16.dp),
+        shape = RoundedCornerShape(12.dp),
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "ID: ${tarea._id}")
-            Text(text = "Nombre: ${tarea.nombre}")
-            Text(text = "Descripción: ${tarea.descripcion}")
-            Text(text = "Autor: ${tarea.autor}")
-            Checkbox(
-                checked = tarea.estado, // Aquí asumimos que 'estado' es un campo Booleano que indica si la tarea está completada
-                onCheckedChange = { isChecked ->
-                    // Llamamos a onCompletadaChange para actualizar el estado de la tarea en la UI
-                    onCompletadaChange(tarea._id ?: "")
-                }
-            )
+        Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Icon(
+                    imageVector = Icons.Default.Notifications,
+                    contentDescription = "Icono de tarea",
+                    tint = Color.Black
+                )
+                Text(text = "Nombre: ${tarea.nombre}",fontWeight = FontWeight.Bold, fontSize = 23.sp,modifier = Modifier.weight(1f))
+                IconButton(
+                        onClick = { mostrarDialogo = true }
+                ) {
+                    Icon(imageVector = Icons.Filled.Delete, contentDescription = "Eliminar tarea")
+            }
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Info,
+                    contentDescription = "Icono de descripcion",
+                    tint = Color.Black
+                )
+                Text(text = "Descripción: ${tarea.descripcion}", fontSize = tamano)
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AccountBox,
+                    contentDescription = "Icono de descripcion",
+                    tint = Color.Black
+                )
+                Text(text = "Autor: ${tarea.autor}", fontSize = tamano)
+            }
+
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = if(tarea.estado)Icons.Default.Check else Icons.Default.Close,
+                    contentDescription = "Icono de descripcion",
+                    tint = Color.Black
+                )
+                Text(text = if (tarea.estado) "Completada: " else "No completada: ", fontSize = tamano)
+                Checkbox(
+                    checked = tarea.estado, // Aquí asumimos que 'estado' es un campo Booleano que indica si la tarea está completada
+                    onCheckedChange = {
+                        // Llamamos a onCompletadaChange para actualizar el estado de la tarea en la UI
+                        onCompletadaChange(tarea._id ?: "")
+                    }
+                )
+            }
             Button(
                 onClick = { mostrarDialogoEdicion = true },
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                Text(text = "Editar tarea")
+                Text(text = "Editar tarea", fontSize = tamano)
             }
             Spacer(Modifier.padding(5.dp))
-            Button(
-                onClick = { mostrarDialogo = true },
-                modifier = Modifier.padding(top = 16.dp)
-            ) {
-                Text(text = "Eliminar tarea")
-            }
+
 
         }
     }

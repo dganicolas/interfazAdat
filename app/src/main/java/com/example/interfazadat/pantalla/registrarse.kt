@@ -1,5 +1,6 @@
 package com.example.interfazadat.pantalla
 
+import android.util.Log
 import android.util.Patterns
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,22 +26,23 @@ import com.example.interfazadat.apiservice.RetrofitClient
 import com.example.interfazadat.componentes.editText
 import com.example.interfazadat.componentes.texto
 import com.example.interfazadat.componentes.ventana
+import com.example.interfazadat.viewModel.UsuariosViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun Registrarse(navControlador: NavHostController) {
-    var username by remember { mutableStateOf("nico") }
-    var email by remember { mutableStateOf("n@n.com") }
-    var password by remember { mutableStateOf("nico") }
-    var passwordRepeat by remember { mutableStateOf("nico") }
-    var calle by remember { mutableStateOf("Avenida Principal") }
-    var numero by remember { mutableStateOf("123") }
-    var cp by remember { mutableStateOf("28001") }
-    var ciudad by remember { mutableStateOf("Barcelona") }
-    var municipio by remember { mutableStateOf("Centro") }
-    var provincia by remember { mutableStateOf("COMUNIDAD DE MADRID") }
+fun Registrarse(navControlador: NavHostController, usuarioViewModel: UsuariosViewModel) {
+    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var passwordRepeat by remember { mutableStateOf("") }
+    var calle by remember { mutableStateOf("") }
+    var numero by remember { mutableStateOf("") }
+    var cp by remember { mutableStateOf("") }
+    var ciudad by remember { mutableStateOf("") }
+    var municipio by remember { mutableStateOf("") }
+    var provincia by remember { mutableStateOf("") }
     var titulo by remember { mutableStateOf("") }
     var mensaje by remember { mutableStateOf("") }
     var cargando by remember { mutableStateOf(false) }
@@ -49,10 +51,9 @@ fun Registrarse(navControlador: NavHostController) {
     if (estadoventana) {
         ventana(mensaje, titulo, { estadoventana = false })
     }
-    if(estadoVentanaCorrecta){
+    if (estadoVentanaCorrecta) {
         ventana(mensaje, titulo) { navControlador.navigate("login") }
     }
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -100,7 +101,7 @@ fun Registrarse(navControlador: NavHostController) {
                 texto = calle,
                 cambioTexto = { calle = it },
                 marcador = "calle",
-                false
+                calle.isNotBlank()
             )
         }
         item {
@@ -108,7 +109,7 @@ fun Registrarse(navControlador: NavHostController) {
                 texto = cp,
                 cambioTexto = { cp = it },
                 marcador = "cp",
-                false
+                cp.isNotBlank()
             )
         }
         item {
@@ -116,7 +117,7 @@ fun Registrarse(navControlador: NavHostController) {
                 texto = numero,
                 cambioTexto = { numero = it },
                 marcador = "numero",
-                false
+                numero.isNotBlank()
             )
         }
         item {
@@ -124,7 +125,7 @@ fun Registrarse(navControlador: NavHostController) {
                 texto = ciudad,
                 cambioTexto = { ciudad = it },
                 marcador = "ciudad",
-                false
+                ciudad.isNotBlank()
             )
         }
         item {
@@ -132,7 +133,7 @@ fun Registrarse(navControlador: NavHostController) {
                 texto = municipio,
                 cambioTexto = { municipio = it },
                 marcador = "municipio",
-                false
+                municipio.isNotBlank()
             )
         }
         item {
@@ -140,11 +141,11 @@ fun Registrarse(navControlador: NavHostController) {
                 texto = provincia,
                 cambioTexto = { provincia = it },
                 marcador = "provincia",
-                false
+                provincia.isNotBlank()
             )
         }
         item {
-            Box(){
+            Box() {
                 if (cargando) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
@@ -152,10 +153,14 @@ fun Registrarse(navControlador: NavHostController) {
         }
         item {
             Button(
-                enabled = !cargando,
+                enabled = !cargando && username.isNotBlank() && email.isNotBlank()
+                        && password.isNotBlank() && passwordRepeat.isNotBlank()
+                        && calle.isNotBlank() && numero.isNotBlank()
+                        && cp.isNotBlank() && ciudad.isNotBlank()
+                        && municipio.isNotBlank() && provincia.isNotBlank(),
                 onClick = {
                     cargando = true
-                    CoroutineScope(Dispatchers.Main).launch {
+                    CoroutineScope(Dispatchers.IO).launch {
                         try {
                             val responseUsuarioRegister = RetrofitClient.instance.registrarUsuario(
                                 UsuarioRegisterDTO(
@@ -174,11 +179,13 @@ fun Registrarse(navControlador: NavHostController) {
                                     )
                                 )
                             )
+                            Log.i("msg_src", responseUsuarioRegister.toString())
                             if (!responseUsuarioRegister.isSuccessful) {
-                                val errorMessage = responseUsuarioRegister.errorBody()?.string() ?: "Error desconocido"
+                                val errorMessage = responseUsuarioRegister.errorBody()?.string()
+                                    ?: "Error desconocido"
                                 throw Exception("Error al registrar usuario: ${responseUsuarioRegister.code()} - $errorMessage")
                             }
-                            val usuario =responseUsuarioRegister.body()
+                            val usuario = responseUsuarioRegister.body()
 
                             titulo = "Éxito"
                             mensaje = usuario?.let {
@@ -190,8 +197,9 @@ fun Registrarse(navControlador: NavHostController) {
                             mensaje = "Error al registrar usuario: ${e.message}"
                         }
                         estadoventana = true
+                        cargando = false
                     }
-                    cargando = false
+
 
                 }
             ) {
@@ -202,8 +210,8 @@ fun Registrarse(navControlador: NavHostController) {
             Button(
                 enabled = !cargando,
                 onClick = {
-                navControlador.navigate("login")
-            }) { texto("logearse") }
+                    navControlador.navigate("login")
+                }) { texto("logearse") }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.example.interfazadat.pantalla
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,11 +17,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.interfazadat.Dto.LoginUsuarioDTO
+import com.example.interfazadat.R
 import com.example.interfazadat.apiservice.RetrofitClient
 import com.example.interfazadat.componentes.editText
 import com.example.interfazadat.componentes.texto
@@ -47,6 +51,11 @@ fun Login(navControlador: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.hacking_etico_jpg),
+            contentDescription = "Descripción de la imagen",
+
+        )
         if (cargando) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         }
@@ -61,10 +70,10 @@ fun Login(navControlador: NavHostController) {
             texto = password,
             cambioTexto = { password = it },
             marcador = "contraseña",
-            password.length > 3
+            password.length >= 6
         )
         Button(
-            enabled = estadoBoton,
+            enabled = username.isNotBlank() && password.isNotBlank() && estadoBoton,
             onClick = {
                 cargando = true
                 CoroutineScope(Dispatchers.IO).launch {
@@ -73,10 +82,11 @@ fun Login(navControlador: NavHostController) {
                         val usuario = RetrofitClient.instance.loginUsuario(
                             LoginUsuarioDTO(username = username, password = password)
                         )
-
+                        Log.i("msg_src", usuario.toString())
                         if (usuario.isSuccessful) {
                             titulo = "Éxito"
                             Usuario.token = ("bearer " + usuario.body()?.get("token"))
+                            Log.i("msg_src",Usuario.token)
                             Usuario.nombre = username
                             Usuario.contrasena = password
                             Usuario.email = RetrofitClient.instance.obtenerEmail(

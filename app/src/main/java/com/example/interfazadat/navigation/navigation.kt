@@ -33,7 +33,7 @@ fun AppNavigation(modifier: Modifier) {
         composable(
             "registrarse"
         ) {
-            Registrarse(navControlador)
+            Registrarse(navControlador,usuariosViewmodel)
         }
         composable(
             "menu"
@@ -41,16 +41,16 @@ fun AppNavigation(modifier: Modifier) {
             Menu(navControlador,tareasViewModel)
         }
         composable("crear tarea"){
-            crearTarea(navControlador,tareasViewModel)
+            crearTarea(navControlador,tareasViewModel,modifier)
         }
         composable("darAlta") {
             darDeAltaScreen(navControlador,usuariosViewmodel)
         }
         composable("mi zona") {
-            miZona(navControlador,usuariosViewmodel)
+            miZona(navControlador,usuariosViewmodel,modifier)
         }
         composable("listarusarios") {
-            listarUsuarios(navControlador,usuariosViewmodel)
+            listarUsuarios(navControlador,usuariosViewmodel,modifier)
         }
     }
 }
