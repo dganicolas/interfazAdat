@@ -65,6 +65,7 @@ fun crearTarea(
 
         // Botón para crear la tarea
         //PD: si el campo de texto tanto nombre, autory descripcion estan vaico este campo debe de estar inactivo
+        //si le pulsa el usuario crea una tarea
         Button(
             onClick = {
                 if (nombre.isNotEmpty() && descripcion.isNotEmpty()) {

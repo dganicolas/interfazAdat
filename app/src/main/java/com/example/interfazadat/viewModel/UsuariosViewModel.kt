@@ -5,7 +5,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,16 +29,21 @@ class UsuariosViewModel() : ViewModel() {
 
     fun listarUsuarios(current: Context){
         viewModelScope.launch {
+
             cargando =true
             try {
+                //lanzamos la peticion a la api
                 val responseUsuarioRegister =
                     RetrofitClient.instance.listarUsuarios(Usuario.token)
+                //vemos que nos ha devuelto
                 Log.i("msg_src", responseUsuarioRegister.toString())
+                //en caso de que la operacion sea exitosa
                 if (!responseUsuarioRegister.isSuccessful) {
                     val errorMessage =
                         responseUsuarioRegister.errorBody()?.string() ?: "Error desconocido"
                     throw Exception(errorMessage)
                 }
+                //creo un toast en el hilo principal
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         current,
@@ -48,7 +52,9 @@ class UsuariosViewModel() : ViewModel() {
                     )
                         .show()
                 }
+                //guardo la lista de usuarios
                 _usuarios.value = responseUsuarioRegister.body()
+            //en caso de error, lanzo un toast de error informativo
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(current, "${e.message}", Toast.LENGTH_SHORT)
@@ -61,6 +67,7 @@ class UsuariosViewModel() : ViewModel() {
 
     fun darDeAlta(usuarioRegisterDTO: UsuarioRegisterDTO, current: Context) {
         viewModelScope.launch {
+
             try {
                 val responseUsuarioRegister =
                     RetrofitClient.instance.registrarUsuario(usuarioRegisterDTO)

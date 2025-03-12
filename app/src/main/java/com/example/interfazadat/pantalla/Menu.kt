@@ -60,6 +60,7 @@ fun Menu(navControlador: NavHostController, tareasViewModel: TareasViewModel) {
         tareasViewModel.cargarTareas()
     }
     Scaffold(
+        //navigation
         topBar = {
             AppBarConMenu("tareas") { selectedItem ->
                 when (selectedItem) {
@@ -139,6 +140,7 @@ fun TareaItem(tarea: Tarea, onEliminar: (String) -> Unit,onCompletadaChange: (St
         shape = RoundedCornerShape(12.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
+            //muestro informacion sobre la tarea
             Row(modifier = Modifier.fillMaxWidth()) {
                 Icon(
                     imageVector = Icons.Default.Notifications,
@@ -146,6 +148,7 @@ fun TareaItem(tarea: Tarea, onEliminar: (String) -> Unit,onCompletadaChange: (St
                     tint = Color.Black
                 )
                 Text(text = "Nombre: ${tarea.nombre}",fontWeight = FontWeight.Bold, fontSize = 23.sp,modifier = Modifier.weight(1f))
+                //icono de basura y cuando lep ulsa elimina la tarea
                 IconButton(
                         onClick = { mostrarDialogo = true }
                 ) {
@@ -180,6 +183,7 @@ fun TareaItem(tarea: Tarea, onEliminar: (String) -> Unit,onCompletadaChange: (St
                     tint = Color.Black
                 )
                 Text(text = if (tarea.estado) "Completada: " else "No completada: ", fontSize = tamano)
+                //si le marca el ususario para se true a false el estado de la tarea y viceversa
                 Checkbox(
                     checked = tarea.estado, // Aquí asumimos que 'estado' es un campo Booleano que indica si la tarea está completada
                     onCheckedChange = {
@@ -188,6 +192,7 @@ fun TareaItem(tarea: Tarea, onEliminar: (String) -> Unit,onCompletadaChange: (St
                     }
                 )
             }
+            // muestro si el pulsa el boton una ventana para que el propio usuario edite la tarea
             Button(
                 onClick = { mostrarDialogoEdicion = true },
                 modifier = Modifier.padding(top = 8.dp)
@@ -201,6 +206,7 @@ fun TareaItem(tarea: Tarea, onEliminar: (String) -> Unit,onCompletadaChange: (St
     }
 
     if (mostrarDialogo) {
+        //muestro la tarea y si confirma elimino la misma
         ConfirmDialog(
             onConfirm = {
                 onEliminar(tarea._id ?: "")
@@ -210,6 +216,7 @@ fun TareaItem(tarea: Tarea, onEliminar: (String) -> Unit,onCompletadaChange: (St
         )
     }
     if (mostrarDialogoEdicion) {
+        //alert que me permite al usuario editar la tarea
         AlertDialog(
             onDismissRequest = { mostrarDialogoEdicion = false },
             title = { Text(text = "Editar tarea") },
@@ -237,6 +244,7 @@ fun TareaItem(tarea: Tarea, onEliminar: (String) -> Unit,onCompletadaChange: (St
                     )
                 }
             },
+            //guarda los cambios de la propia tarea
             confirmButton = {
                 Button(
                     onClick = {
@@ -248,6 +256,7 @@ fun TareaItem(tarea: Tarea, onEliminar: (String) -> Unit,onCompletadaChange: (St
                     Text("Guardar cambios")
                 }
             },
+            //no cambia los campos
             dismissButton = {
                 Button(onClick = { mostrarDialogoEdicion = false }) {
                     Text("Cancelar")
@@ -259,6 +268,7 @@ fun TareaItem(tarea: Tarea, onEliminar: (String) -> Unit,onCompletadaChange: (St
 
 @Composable
 fun ConfirmDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    //alert que informa al ususario sobre is quiere eliminar esa tarea
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(text = "¿Confirmar eliminación?") },

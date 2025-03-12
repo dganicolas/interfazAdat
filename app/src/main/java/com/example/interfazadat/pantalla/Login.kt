@@ -51,15 +51,18 @@ fun Login(navControlador: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        //imagen
         Image(
             painter = painterResource(id = R.drawable.hacking_etico_jpg),
             contentDescription = "Descripción de la imagen",
 
         )
+        //icono de cuando carga la ui
         if (cargando) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         }
         texto("entrar a la app")
+        //campos de textos del login
         editText(
             texto = username,
             cambioTexto = { username = it },
@@ -75,6 +78,7 @@ fun Login(navControlador: NavHostController) {
         Button(
             enabled = username.isNotBlank() && password.isNotBlank() && estadoBoton,
             onClick = {
+                //lanzo la peticion
                 cargando = true
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
@@ -83,6 +87,7 @@ fun Login(navControlador: NavHostController) {
                             LoginUsuarioDTO(username = username, password = password)
                         )
                         Log.i("msg_src", usuario.toString())
+                        //si sale exitoso
                         if (usuario.isSuccessful) {
                             titulo = "Éxito"
                             Usuario.token = ("bearer " + usuario.body()?.get("token"))
@@ -93,12 +98,14 @@ fun Login(navControlador: NavHostController) {
                                 Usuario.token
                             ).body()?.get("mensaje")
                         }
+                        //si sale exitoso igualo el token y reviso que no esta vacio
                         if (Usuario.token == "") {
                             throw Exception(usuario.errorBody()?.string() ?:"" )
                         }
                         val esAdmin = RetrofitClient.instance.esAdmin(Usuario.token).body()
                         Usuario.rol = esAdmin
                         Usuario.nombre = username
+                        //muestro un toast de que todo vaya bien
                         withContext(Dispatchers.Main) {
                             Toast.makeText(current, "sesion iniciada", Toast.LENGTH_SHORT)
                                 .show()
@@ -106,6 +113,7 @@ fun Login(navControlador: NavHostController) {
                         }
 
                     } catch (e: Exception) {
+                        //si sale un error se lo muestro al usuario por un toast
                         estadoBoton = true
                         cargando=false
                         withContext(Dispatchers.Main) {
@@ -123,6 +131,7 @@ fun Login(navControlador: NavHostController) {
         ) {
             texto("iniciar sesion")
         }
+        //boton que navega a registrarse
         Button(
             enabled = estadoBoton,
             onClick = {

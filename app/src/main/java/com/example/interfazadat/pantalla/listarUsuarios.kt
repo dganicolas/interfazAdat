@@ -66,6 +66,7 @@ fun listarUsuarios(
         ) {
             Text("volver")
         }
+        //si la lista esta vaica muestro un mensaje de no hay usuarios disponibles y si no la lista de usuarios
         if (usuarios.value.isEmpty()) {
             Text(text = "No hay usuarios disponibles.")
         } else {
@@ -94,6 +95,7 @@ fun UsuarioItem(usuario: UsuarioDTO, onClick: (String) -> Unit) {
         shape = RoundedCornerShape(12.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            //muestro toda la info del usuario
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -132,11 +134,13 @@ fun UsuarioItem(usuario: UsuarioDTO, onClick: (String) -> Unit) {
         ) {
             Text(text = "Eliminar")
         }
+        //muestro un alert que el usuario confirma esa eliminacion
         if (mostrarDialogo) {
             AlertDialog(
                 onDismissRequest = { mostrarDialogo = false }, // Cerrar el diálogo si se hace clic fuera de él
                 title = { Text(text = "Confirmar eliminación") },
                 text = { Text(text = "¿Estás seguro de eliminar al usuario ${usuario.username}?") },
+                //elimina el usuario
                 confirmButton = {
                     TextButton(onClick = {
                         onClick(usuario.username) // Llamar a la función de eliminación
@@ -145,6 +149,7 @@ fun UsuarioItem(usuario: UsuarioDTO, onClick: (String) -> Unit) {
                         Text("Eliminar")
                     }
                 },
+                //el usuario no hace nada
                 dismissButton = {
                     TextButton(onClick = { mostrarDialogo = false }) {
                         Text("Cancelar")

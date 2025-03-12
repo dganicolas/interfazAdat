@@ -57,6 +57,7 @@ fun darDeAltaScreen(navControlador: NavHostController, usuariosViewmodel: Usuari
             Spacer(Modifier.size(25.dp))
             texto("bienvenido a registro\n por favor complete los campos")
         }
+        //muestro todos los datos del ususario a dar de alta
         item {
             editText(
                 texto = username,
@@ -144,6 +145,7 @@ fun darDeAltaScreen(navControlador: NavHostController, usuariosViewmodel: Usuari
                 }
             }
         }
+        //el usuario registra el usuario nuevo
         item {
             Button(
                 enabled = !cargando,
@@ -171,6 +173,7 @@ fun darDeAltaScreen(navControlador: NavHostController, usuariosViewmodel: Usuari
                 texto("registrarse")
             }
         }
+        //el usuario vuelve a la pantalla menu
         item {
             Button(
                 enabled = !cargando,

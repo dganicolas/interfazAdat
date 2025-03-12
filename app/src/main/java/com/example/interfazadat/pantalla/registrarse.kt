@@ -64,6 +64,7 @@ fun Registrarse(navControlador: NavHostController, usuarioViewModel: UsuariosVie
             Spacer(Modifier.size(25.dp))
             texto("bienvenido a registro\n por favor complete los campos")
         }
+        // los diferentes campos de textos
         item {
             editText(
                 texto = username,
@@ -144,6 +145,7 @@ fun Registrarse(navControlador: NavHostController, usuarioViewModel: UsuariosVie
                 provincia.isNotBlank()
             )
         }
+        //icono de carga para que el usuario no piense que esta pilla la interfaz
         item {
             Box() {
                 if (cargando) {
@@ -151,6 +153,7 @@ fun Registrarse(navControlador: NavHostController, usuarioViewModel: UsuariosVie
                 }
             }
         }
+        // boton que compruebo que todo este relleno o no este cargando una solicitud para que el ususario no sobresature la api
         item {
             Button(
                 enabled = !cargando && username.isNotBlank() && email.isNotBlank()
@@ -162,6 +165,7 @@ fun Registrarse(navControlador: NavHostController, usuarioViewModel: UsuariosVie
                     cargando = true
                     CoroutineScope(Dispatchers.IO).launch {
                         try {
+                            //enviamos la peticion a la pai
                             val responseUsuarioRegister = RetrofitClient.instance.registrarUsuario(
                                 UsuarioRegisterDTO(
                                     username = username,
@@ -179,20 +183,25 @@ fun Registrarse(navControlador: NavHostController, usuarioViewModel: UsuariosVie
                                     )
                                 )
                             )
+                            //miramos lo que nos devuelve
                             Log.i("msg_src", responseUsuarioRegister.toString())
+                            //si la operacion es fallida, entonces devolvermos un error
                             if (!responseUsuarioRegister.isSuccessful) {
                                 val errorMessage = responseUsuarioRegister.errorBody()?.string()
                                     ?: "Error desconocido"
                                 throw Exception("Error al registrar usuario: ${responseUsuarioRegister.code()} - $errorMessage")
                             }
+                            //recogemos el usuario que nos ha devuelto la api
                             val usuario = responseUsuarioRegister.body()
 
+                            //configuramos el mensaje y titulo de la ventana
                             titulo = "Éxito"
                             mensaje = usuario?.let {
                                 "${it.username}\n${it.email}\n${it.rol}"
                             } ?: "El usuario no se pudo recuperar"
                             estadoVentanaCorrecta = true
                         } catch (e: Exception) {
+                            //lanzamos una ventana error
                             titulo = "Error"
                             mensaje = "Error al registrar usuario: ${e.message}"
                         }
@@ -206,6 +215,7 @@ fun Registrarse(navControlador: NavHostController, usuarioViewModel: UsuariosVie
                 texto("registrarse")
             }
         }
+        //boton de volver a pantalla de login
         item {
             Button(
                 enabled = !cargando,

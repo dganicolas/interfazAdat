@@ -43,9 +43,11 @@ fun miZona(
             .padding(16.dp)
     ) {
         Spacer(modifier = Modifier.height(16.dp))
+        //icono de carga para qeu el ususario no este la interfaz pillada
         if (usuariosViewmodel.cargando) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         }
+        //ventana informativa de que confirme su propia eliminacion de la cuenta
         if (estadoventana) {
             AlertDialog(
                 onDismissRequest = { estadoventana = false },
@@ -69,7 +71,7 @@ fun miZona(
             )
         }
 
-
+    //boton para volver atras
         Button(
             onClick = {
                 navControlador.popBackStack()
@@ -119,6 +121,7 @@ fun miZona(
         ) {
             Text(text = "Guardar Cambios")
         }
+        // boton para eliminar su propia cuenta
         Button(
             onClick = {
                 estadoventana = true
